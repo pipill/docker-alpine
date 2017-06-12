@@ -1,8 +1,10 @@
-FROM alpine:3.3
+FROM pipill/armhf-alpine:3.3
 
 MAINTAINER nimmis <kjell.havneskold@gmail.com>
 
 COPY rootfs/ /
+
+RUN [ "cross-build-start" ]
 
 RUN apk update && apk upgrade && \
     apk add ca-certificates supervisor rsyslog supervisor && \
@@ -10,6 +12,8 @@ RUN apk update && apk upgrade && \
     mkdir /etc/my_runonce /etc/my_runalways /etc/container_environment /etc/workaround-docker-2267 /var/log/supervisor && \
     touch /var/log/startup.log && chmod 666 /var/log/startup.log && \
     rm -rf /var/cache/apk/*
+
+RUN [ "cross-build-end" ]
 
 # Set environment variables.
 ENV HOME /root
